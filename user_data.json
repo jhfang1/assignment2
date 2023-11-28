@@ -2,5 +2,5 @@
   "dport@hawaii.edu": {"name": "Dan Port", "password": "portspassword"},
   "kazman@hawaii.edu": {"name": "Rick Kazman", "password": "kazmanpassword"},
   "itm352@hawaii.edu": {"name": "ITM 352", "password": "grader"},
-  "test": {"name": "test test", "password": "1"}
+  "test": {"name": "test test", "password": "1Server"}
 }

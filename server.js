@@ -9,8 +9,6 @@ const qs = require('querystring');
 
 app.use(express.urlencoded({ extended: true }));
 
-var formData;
-
 app.all('*', function (req, res, next) {
   console.log(req.method + ' to ' + req.path);
   next();
@@ -52,12 +50,11 @@ app.post("/process_form", function (req, res) {
   }
 
   //Turn data from post to string
-  var qstr = qs.stringify(req.body);
+  const qstr = qs.stringify(req.body);
   console.log(qstr);
-
+  
   //create invoice if valid
   if (hasNonNegInt || hasInvalidQuantity) {
-    formData = qstr;
     res.redirect(`store.html?${qstr}`);
   } else {
       //Track quantity_sold
@@ -73,6 +70,8 @@ app.post("/process_form", function (req, res) {
     res.redirect(`login.html`);
   }
 });
+
+console.log(qstr);
 
 //Login information
 app.post("/login", function(req, res) {
@@ -112,28 +111,36 @@ app.post("/register", function(req, res) {
   //Process the registration form
   username = req.body.email.toLowerCase();
   console.log(username);
+  console.log(req.body.firstname);
 
   //Registration form validation
   if (typeof users_reg_data[username] != 'undefined') {
-    errors.push(`Hey! ${username} is already registered!`);
+    errors.push(`${username} is already registered!`);
+    console.log("e: username dupe");
   }
   if (!validateEmail(username)) {
-    errors.push(`Invalid E-mail Format please enter a valid E-mail address.`)
+    errors.push(`Invalid E-mail Format!`);
+    console.log("e: invalid email");
   }
   if (req.body.password == '') {
-    errors.push(`Password cannot be empty!`)
+    errors.push(`Password cannot be empty!`);
+    console.log("empty");
   } else if (!validatePwd(req.body.password)) {
-    errors.push(`Password must not include spaces and must be between 10-16 characters`)
+    errors.push(`Password must not include spaces and must be between 10-16 characters!`);
+    console.log("password not valid");
   }
   if (req.body.password != req.body.repeat_password) {
-    errors.push(`Repeat password not the same as password!`);
+    errors.push(`Passwords do not match!`);
+    console.log("passwords no match");
   } 
   if (req.body.firstname == '' || req.body.lastname == '') {
-    errors.push(`Please enter your first and last name!`)
-  } else if (!validateName([req.body.firstname] + ' ' + [req.body.lastname])) {
-    errors.push(`Please check your name! It must only contain letters and be between 2-30 characters long`)
+    errors.push(`Please enter your first and last name!`);
+    console.log("no name");
+  } else if (!validateName((req.body.firstname) + (req.body.lastname))) {
+    errors.push(`Please enter a valid name!`);
+    console.log("validate name");
   }
-  if (Object.keys(errors).length == 0) {
+  if (errors.length == 0) {
     let newUser = {
         name: [req.body.firstname] + ' ' + [req.body.lastname],
         password: req.body.password
@@ -187,7 +194,7 @@ function validateEmail(email) {
   return regex.test(email);
 }
 
-//Password Validation
+//Password Validation Must have 10-16 characters, no space
 function validatePwd(pwd) {
   passwordRegex = /^[^\s]{10,16}$/;
   return passwordRegex.test(pwd);
@@ -207,6 +214,7 @@ function validateName(name) {
 //  can only contain letters, numbers, and the characters “_” and “.” domain must end in . something y must only contain letters and numbers
 // may only be one email
 
+//figure out how to store data 
 
 //pWD REQ
 //min 10, max 16
@@ -215,4 +223,4 @@ function validateName(name) {
 // confirm password
 //add full name, only letters
 
-//MAKE EVERYTHING STICKY
+//MAKE EVERYTHING STICKY (LAST)
