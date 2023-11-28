@@ -48,7 +48,7 @@
     }
 
     //window.onload funciton taken from Lab12, modified
-  window.onload = function () {
+    window.onload = function () {
         let params = (new URL(document.location)).searchParams; // get the query string which has the form data
         // form was submitted so check that quantities are valid then redirect to invoice if ok.
         if (params.has('purchase_submit')) {
@@ -68,15 +68,23 @@
             }
             // Now respond to errors or redirect to invoice if all is ok
             if(has_errors) {
-                document.getElementById("status").textContent = "Please check quantities!";
-            } else { // all good to go!
-                fetchUpdatedProductData();
-                window.location = `./invoice.html${document.location.search}`;
-                window.stop;
-            }
+                document.getElementById("status").textContent = "Please try again!";
+            } 
+          }
         }
-    }
 
+    //fetch function to update quantity sold don't know if this does anything
+    /*fetch ('/process_form', {
+      method: 'POST'
+    },
+    ).then (response => {
+      if (!response.ok) {
+        throw new Error('Could not get response')
+      }
+    })
+      .then(sold => {
+        console.log('quantity sold updated:', sold)
+      })*/
 
 </script>
 <style>
@@ -96,6 +104,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
   class="w3-bar-item w3-button">☰</a>
   <a href="index.html" onclick="w3_close()" class="w3-bar-item w3-button">Homepage</a>
   <a href="#food" onclick="w3_close()" class="w3-bar-item w3-button">Shop</a>
+  <a href="login.html" onclick="w3_close()" class="w3-bar-item w3-button">Register or Login</a>
 </nav>
 
 <!-- Top menu -->
@@ -121,6 +130,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
           <img class="w3-image image" src="${drinks[i].image}" alt="${drinks[i].name}" style="width:100%">
           <h3>${drinks[i].name}</h3>
           <h3>${drinks[i].quantity_available} in stock</h3> 
+          <h4>${drinks[i].total_sold} sold!</h4>
           <p> Currently $${drinks[i].price} for 1 </p>
           <span id="quantity${i}_label">Amount:</span>
 					<input id="quantity${i}" name="quantity${i}" type="text" placeholder="0" onkeyup="checkQuantityInputs(this);">

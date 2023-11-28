@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jasmine's Store Signup</title>
+  </head>
+  <body>
+    <!--Code taken from themevault https://www.themevault.net/timecenter-watch-ecommerce-web-template#-->
+    <!--Slightly modified for assignemnt 2 use, copied up to line 78-->
+    <div id="content" class="col-sm-9">
+      <div class="row">
+        <div id="content" class="col-sm-12">
+          <h3>
+            <strong>I AM A NEW CUSTOMER</strong>
+          </h3>
+          <p>If you already have an account with us, please login at the <a href="login.html">login page</a>. </p>
+          <br>
+          <form action="/register" method="POST" class="form-horizontal">
+            <fieldset id="account">
+              <legend>Your Personal Details</legend>
+              <div class="form-group required" style="display: none;">
+                <label class="col-sm-2 control-label">Customer Group</label>
+                <div class="col-sm-10">
+                  <div class="radio">
+                    <input type="radio" id="customer_group_id1" name="customer_group_id" value="1" checked="checked">
+                    <label for="customer_group_id1"> Default</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-firstname">First Name</label>
+                <div class="col-sm-10">
+                  <input type="text" name="firstname" value="" placeholder="First Name" id="input-firstname" class="form-control">
+                </div>
+              </div>
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-lastname">Last Name</label>
+                <div class="col-sm-10">
+                  <input type="text" name="lastname" value="" placeholder="Last Name" id="input-lastname" class="form-control">
+                </div>
+              </div>
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-email">E-Mail</label>
+                <div class="col-sm-10">
+                  <input type="email" name="email" value="" placeholder="E-Mail" id="input-email" class="form-control">
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Your Password</legend>
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-password">Password</label>
+                <div class="col-sm-10">
+                  <input type="password" name="password" value="" placeholder="Password" id="input-password" class="form-control">
+                </div>
+              </div>
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-confirm">Password Confirm</label>
+                <div class="col-sm-10">
+                  <input type="password" name="repeat_password" value="" placeholder="Password Confirm" id="input-confirm" class="form-control">
+                </div>
+              </div>
+            </fieldset>
+            <div class="buttons">
+              <div class="pull-right">I have read and agree to the <a class="agree">
+                  <b>Privacy Policy</b>
+                </a>
+                <input type="checkbox" id="agree1" name="agree" value="1" style="vertical-align: text-bottom">
+                <label for="agree1"></label> &nbsp; <input type="submit" value="Continue" class="btn btn-primary">
+              </div>
+            </div>
+            <div id="errorsID">
+                <script>
+                    //Retrieve error from server, convert it to a proper array
+                    let params = (new URL(document.location)).searchParams;
+                    console.log(params);
+                    const urlString = decodeURIComponent(params.toString());
+                    const replacedString = urlString.replace(/\+/g, ' ').replace(/=/g, '');
+                    const stringArray = replacedString.split(',');
+                    console.log(stringArray);
+            
+                    //Set Variable for errors, place on the form
+                    let errorsContent = '';
+                    if (stringArray && stringArray.length > 0) {
+                        for (i = 0; i < stringArray.length; i++) {
+                            errorsContent = stringArray[i] + ' ';
+                        }
+                      document.getElementById("errorsID").textContent = errorsContent;
+                    }
+                    //Display error on the form.
+                    document.getElementById("errorsID").textContent = "Looks good!";
+                </script>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
