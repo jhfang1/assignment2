@@ -67,15 +67,14 @@ app.post("/process_form", function (req, res) {
       console.log(quantity_remaining);
     }
       //validation for login required!!!! $#########################################
-    res.redirect(`login.html`);
+    res.redirect(`login.html?${qstr}`);
   }
 });
 
-console.log(qstr);
-
 //Login information
 app.post("/login", function(req, res) {
-  console.log('in process + form', req.body);
+  console.log(req.body);
+  the_quantities = req.body['hidden'];
   the_username = req.body['email'].toLowerCase();
   the_password = req.body['password'];
   if (typeof users_reg_data[the_username] != 'undefined') {
@@ -86,17 +85,14 @@ app.post("/login", function(req, res) {
         <script>
         // Redirect to a different page after 2 seconds
         setTimeout(function () {
-          window.location.href = '/invoice.html';
+          window.location.href = '/invoice.html?${the_quantities}';
         }, 2000); // 2000 milliseconds (2 seconds)
         </script>
         <div> Welcome ${the_username}! You will be redirected shortly...</div>
         </body>
         `);
-        //still need to figure this out
-        if (req.body.hasOwnProperty('purchase_submit')) {
-          res.redirect(`invoice.html?${qstr}`)
-        }
       } else {
+        //need to change these two down here into an error
           res.send(`Wrong password!`);
       }
       return;
@@ -107,6 +103,7 @@ app.post("/login", function(req, res) {
 //Registration Information
 app.post("/register", function(req, res) {
   console.log('in process + form', req.body);
+  the_quantities = req.body['hidden'];
   let errors = [];
   //Process the registration form
   username = req.body.email.toLowerCase();
@@ -160,7 +157,7 @@ app.post("/register", function(req, res) {
       <script>
       // Redirect to a different page after 2 seconds
       setTimeout(function () {
-        window.location.href = '/invoice.html';
+        window.location.href = '/invoice.html?${the_quantities}';
       }, 2000); // 2000 milliseconds (2 seconds)
       </script>
       <div> Thank you for registering, ${[req.body.firstname] + ' ' + [req.body.lastname]}! You will be redirected shortly...</div>
@@ -208,19 +205,16 @@ function validateName(name) {
 
 //Check if body req has product submit (this is probably not for the right assignment)
 
+//Login
+/*  DONE
+    Create a simple Login page with email address and password fields as well as submit buttons for logging in or editing registration. Add a “register” link than when clicked will show the user a registration page. You may optionally put the login and registration on the same page.
+    The user should only be required to login when purchasing. They should be able to view your store items without logging in first.
+    The email address and password combination entered should be checked against the user information array that you retrieve from the saved file. When checking the email address, it should not matter what case was used. For example, email addresss itm352@hawaii.edu, ITM352@HAWAII.EDU, and ItM352@hAWaii.EdU should all be considered the same. That is, email addresss are CASE INSENSITIVE. On the other hand, passwords should be CASE SENSITIVE where “GRADER” is a different password than “grader”.
+*/
 
-//REQ
-// EMAIL ADDRESS CASE INSENSITIVE
-//  can only contain letters, numbers, and the characters “_” and “.” domain must end in . something y must only contain letters and numbers
-// may only be one email
-
+//registration done
+//Processing registration and login
 //figure out how to store data 
-
-//pWD REQ
-//min 10, max 16
-// space not allowed
-// case sensitive
-// confirm password
-//add full name, only letters
-
+//transfer store data to invoice.html, also transfer user data to invoice.html (this does not seem hard...)
+//
 //MAKE EVERYTHING STICKY (LAST)

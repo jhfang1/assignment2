@@ -3,6 +3,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jasmine's Store Login</title>
+  <script>
+    //Get parameters of quantities submitted from the URL
+    window.onload = function() {
+        let params = (new URL(document.location)).searchParams; 
+        document.getElementById("input-qstr").value = params; // get the query string which has the form data
+      }
+    </script>
 </head>
 <body>
     <!--Code taken from themevault https://www.themevault.net/timecenter-watch-ecommerce-web-template#-->
@@ -21,7 +28,16 @@
                     </div>
                 </div>
                 <p>By creating an account you will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made.</p>
-                <a class="btn btn-primary" href="register.html">Sign-up for an Account</a></div>
+                <!--Create A Href-->
+                <script>
+                    window.onload = function() {
+                        const registerLink = document.createElement('a');
+                        registerLink.href = `/register.html?${(document.getElementById("input-qstr").value)}`;
+                        registerLink.class = "btn btn-primary";
+                        registerLink.innerHTML = "Sign-up for an Account"
+                    }
+                </script>
+                </div>
         </div>
         <div class="col-sm-6">
             <div class="well">
@@ -40,6 +56,7 @@
                     <div class="form-group">
                         <label for="input-password" class="control-label">Password</label>
                         <input type="password" class="form-control" id="input-password" placeholder="Password" name="password">
+                        <input id="input-qstr" type="hidden" name="hidden" value="">
                         <br>
                         <a>Forgot Password?</a>
                     </div>
