@@ -102,8 +102,9 @@ app.post("/login", function(req, res) {
 
 //Registration Information
 app.post("/register", function(req, res) {
-  console.log('in process + form', req.body);
+  console.log(req.body);
   the_quantities = req.body['hidden'];
+  stickyField = [req.body.email, req.body.lastname, req.body.firstname];
   let errors = [];
   //Process the registration form
   username = req.body.email.toLowerCase();
@@ -123,7 +124,7 @@ app.post("/register", function(req, res) {
     errors.push(`Password cannot be empty!`);
     console.log("empty");
   } else if (!validatePwd(req.body.password)) {
-    errors.push(`Password must not include spaces and must be between 10-16 characters!`);
+    errors.push(`Password must not include spaces! Must have at least one number and one special character and be 10-16 chars long!`);
     console.log("password not valid");
   }
   if (req.body.password != req.body.repeat_password) {
@@ -165,7 +166,7 @@ app.post("/register", function(req, res) {
       `);
   } else {
     //var erstr = qs.stringify(errors);
-    res.redirect(`register.html?${errors}`);
+    res.redirect(`register.html?${errors},${stickyField}`);
   }
 });
 
@@ -192,8 +193,10 @@ function validateEmail(email) {
 }
 
 //Password Validation Must have 10-16 characters, no space
+
+//######################IR2 Require that passwords have at least one number and one special character.##############################//
 function validatePwd(pwd) {
-  passwordRegex = /^[^\s]{10,16}$/;
+  passwordRegex = /^(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])(?=.*\d)[^\s]{10,16}$/;
   return passwordRegex.test(pwd);
 }
 

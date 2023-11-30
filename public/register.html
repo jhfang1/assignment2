@@ -9,11 +9,13 @@
         //Retrieve error from server, convert it to a proper array
         let params = (new URL(document.location)).searchParams;
         //Get params of functions
+
+        //TO DO, separate errors and StickyField
         document.getElementById("input-qstr").value = params;
         console.log(params);
         const urlString = decodeURIComponent(params.toString());
-        const replacedString = urlString.replace(/\+/g, ' ').replace(/=/g, '');
-        const stringArray = replacedString.split(',');
+        //const replacedString = urlString.replace(/\+/g, ' ').replace(/=/g, '');
+        //const stringArray = replacedString.split(',');
         console.log(stringArray);
   
         //Set Variable for errors, place on the form
