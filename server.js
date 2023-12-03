@@ -57,15 +57,6 @@ app.post("/process_form", function (req, res) {
   if (hasNonNegInt || hasInvalidQuantity) {
     res.redirect(`store.html?${qstr}`);
   } else {
-      //Track quantity_sold
-      for (let i in product_data) {
-      //KEEPING TRACK OF STOCK LEFT IR1 ASSIGNMENT 1
-      //How much was sold just now
-      product_data[i].total_sold = Number(product_data[i].total_sold + (parseInt(req.body['quantity' + i])));
-  
-      let quantity_remaining = [(product_data[i].quantity_available -= product_data[i].total_sold), product_data[i].total_sold]; // Reduce available quantity
-      console.log(quantity_remaining);
-    }
       //validation for login required!!!! $#########################################
     res.redirect(`login.html?${qstr}`);
   }
@@ -101,26 +92,7 @@ app.post("/login", function(req, res) {
     errors.push(`Username ${the_username} does not exist!`);
   }
   errorQueryString = `error=${encodeURIComponent(errors)}`;
-  res.redirect(`/login.html?${the_quantities}&${errorQueryString}`);
-
-  //TEST
-
-  /*let realName = users_reg_data.name;
-  console.log(realName);
-  //get last name, first name, and email in a single array
-  let nameString = `&name=${encodeURIComponent(users_reg_data.name)}}&email=${encodeURIComponent(users_reg_data)}`;
-  if (typeof users_reg_data[the_username] != 'undefined') {
-      if (users_reg_data[the_username].password == the_password) {
-        res.send(loginRedirectTemplate(the_quantities, realName, nameString));
-      } else {
-        errors.push(`Wrong Password!`);
-      }
-    } else {
-      errors.push(`Username ${the_username} does not exist`);
-      //If error redirect
-      errorQueryString = `error=${encodeURIComponent(errors)}`;
-      res.redirect(`/login.html?${the_quantities}&${errorQueryString}`);
-    }*/
+  res.redirect(`/login.html?${the_quantities}&${errorQueryString}&email=${encodeURIComponent(req.body['email'])}`);
 });
 
 //Registration Information
@@ -190,6 +162,19 @@ app.post("/register", function(req, res) {
   }
 });
 
+//Remove stock after Item Submit
+app.post("/purchase_submit", function(req, res) {
+  console.log(req.body);
+  for (let i in product_data) {
+    //KEEPING TRACK OF STOCK LEFT IR1 ASSIGNMENT 1
+    //How much was sold just now
+    product_data[i].total_sold = Number(product_data[i].total_sold + (parseInt(req.body['quantity' + i])));
+    let quantity_remaining = [(product_data[i].quantity_available -= product_data[i].total_sold), product_data[i].total_sold]; // Reduce available quantity
+    console.log(quantity_remaining);
+  }
+  res.send(purchaseTemplateRedirect(req.body['hiddenname'], req.body['hiddentotal']))
+});
+
 //rootdir will be in public starting from index.html
 app.use(express.static(__dirname + '/public'));
 
@@ -231,46 +216,77 @@ function loginRedirectTemplate(qdata, name, invoiceName) {
   return `
   <!DOCTYPE html>
   <html>
-  <head>
+  <link rel="icon" href="images/favicon.png"/>
+  <link href="css/general/redirect.css" rel="stylesheet" type="text/css"/>
+  <title>Redirecting...</title>
     <script>
-    // Redirect to a different page after 2 seconds
-    setTimeout(function () {
-      window.location.href = '/invoice.html?${qdata}${invoiceName}&login=YVCNSADYFVnmeqw9umr3i91mri9';
-    }, 2000); // 2000 milliseconds (2 seconds)
+      // Redirect to a different page after 2 seconds
+      setTimeout(function () {
+        window.location.href = '/invoice.html?${qdata}${invoiceName}&login=dfszu9i8NUFJDNUfdNASU0djmgu90SDM';
+      }, 4000); // 4000 milliseconds (2 seconds)
     </script>
-  </head>
-  <body>
-  <div> Welcome ${name}! You will be redirected shortly...</div>
-  </body>
+    <br><br><br>
+    <h1>Processing Login...</h1>
+    <div class="slider">
+    <div class="line"></div>
+    <div class="break dot1"></div>
+    <div class="break dot2"></div>
+    <div class="break dot3"></div>
+    </div>
+    <p>Welcome ${name}! You will be redirected to the invoice page shortly...</p>
   </html>
   `
 }
 
 function registerRedirectTemplate(qdata, name, invoiceName) {
   return `
-  <body>
-  <script>
-  // Redirect to a different page after 2 seconds
-  setTimeout(function () {
-    window.location.href = '/invoice.html?${qdata}${invoiceName}&login=dfszu9i8NUFJDNUfdNASU0djmgu90SDM';
-  }, 2000); // 2000 milliseconds (2 seconds)
-  </script>
-  <div> Thank you for registering, ${name}! You will be redirected shortly...</div>
-  </body>
+  <!DOCTYPE html>
+  <html>
+  <link rel="icon" href="images/favicon.png"/>
+  <link href="css/general/redirect.css" rel="stylesheet" type="text/css"/>
+  <title>Redirecting...</title>
+    <script>
+      // Redirect to a different page after 2 seconds
+      setTimeout(function () {
+        window.location.href = '/invoice.html?${qdata}${invoiceName}&login=YVCNSADYFVnmeqw9umr3i91mri9';
+      }, 4000); // 4000 milliseconds (2 seconds)
+    </script>
+    <br><br><br>
+    <h1>Processing Registration...</h1>
+    <div class="slider">
+    <div class="line"></div>
+    <div class="break dot1"></div>
+    <div class="break dot2"></div>
+    <div class="break dot3"></div>
+    </div>
+    <div> Thank you for registering, ${name}! You will be redirected to the checkout page shortly...</div>
+  </html>
+  `
+  }
+
+function purchaseTemplateRedirect(name, total) {
+  return `
+  <!DOCTYPE html>
+  <html>
+  <link rel="icon" href="images/favicon.png"/>
+  <link href="css/general/redirect.css" rel="stylesheet" type="text/css"/>
+  <title>Thank you for your order!...</title>
+    <script>
+      // Redirect to a different page after 2 seconds
+      setTimeout(function () {
+        window.location.href = '/store.html';
+      }, 8000); // 8000 milliseconds (8 seconds)
+    </script>
+    <br><br><br>
+    <h1>Thanks for your purchase!</h1>
+    <div class="slider">
+    <div class="line"></div>
+    <div class="break dot1"></div>
+    <div class="break dot2"></div>
+    <div class="break dot3"></div>
+    </div>
+    <div>Thanks for your purchase, ${name} of ${total} items! Your order has been submitted. You will be redirected back to the store page in 8 seconds.</div>
+    <div>If the redirect does not work, click <a href="/store.html";>here!<a></div>
+  </html>
   `
 }
-//Check if body req has product submit (this is probably not for the right assignment)
-
-//Login
-/*  DONE
-    Create a simple Login page with email address and password fields as well as submit buttons for logging in or editing registration. Add a “register” link than when clicked will show the user a registration page. You may optionally put the login and registration on the same page.
-    The user should only be required to login when purchasing. They should be able to view your store items without logging in first.
-    The email address and password combination entered should be checked against the user information array that you retrieve from the saved file. When checking the email address, it should not matter what case was used. For example, email addresss itm352@hawaii.edu, ITM352@HAWAII.EDU, and ItM352@hAWaii.EdU should all be considered the same. That is, email addresss are CASE INSENSITIVE. On the other hand, passwords should be CASE SENSITIVE where “GRADER” is a different password than “grader”.
-*/
-
-//registration done
-//Processing registration and login
-//figure out how to store data 
-//transfer store data to invoice.html, also transfer user data to invoice.html (this does not seem hard...)
-//
-//MAKE EVERYTHING STICKY (LAST)

@@ -1,15 +1,19 @@
 @charset "UTF-8";
 
+body {
+  background-color: #1a1625;
+}
 .invoice-box {
   max-width: 800px;
   margin: auto;
   padding: 30px;
-  border: 1px solid #eee;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  border: 1px solid #2f2b3a;
+  box-shadow: 0 0 10px rgba(166, 136, 250, 0.15);
   font-size: 16px;
   line-height: 24px;
   font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
-  color: #555;
+  color: #fff;
+  background-color: #2f2b3a;
 }
 
 .invoice-box table {
@@ -46,8 +50,8 @@
 }
 
 .invoice-box table tr.heading td {
-  background: #eee;
-  border-bottom: 1px solid #ddd;
+  background: #3f3f3f;
+  border-bottom: 1px solid #3f3f3f;
   font-weight: bold;
 }
 
@@ -89,4 +93,10 @@
 
 .invoice-box.rtl table tr td:nth-child(2) {
   text-align: left;
+}
+
+.checkoutBtn {
+  left: 61%;
+  top: 10px;
+  cursor: pointer;
 }

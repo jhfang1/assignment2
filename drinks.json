@@ -33,7 +33,7 @@
   },
   {
     "productId": 5,
-    "name" : "Premium Yuzu and Lemon Soda",
+    "name" : "Yuzu Lemon Soda",
     "price" : 7,
     "image" : "/images/yuzulemon.webp",
     "quantity_available" : 200,

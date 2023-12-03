@@ -7,10 +7,10 @@
 	{
 		margin: 0px;
 		padding: 0px;
-		background: #E4C65D;
+		background: #7a5af5;
 		font-family: 'Questrial', sans-serif;
 		font-size: 12pt;
-		color: rgba(0,0,0,.6);
+		color: rgba(255,255,255,.6);
 	}
 	
 	
@@ -18,7 +18,7 @@
 	{
 		margin: 0;
 		padding: 0;
-		color: #404040;
+		color: #fff;
 	}
 	
 	p, ol, ul
@@ -43,7 +43,7 @@
 	
 	a
 	{
-		color: #E85D4B;
+		color: #fff;
 	}
 	
 	a:hover
@@ -239,7 +239,7 @@
 	ul.contact li a:before
 	{
 		display: inline-block;
-		background: #E2AD1C;
+		background: #a688fa;
 		width: 40px;
 		height: 40px;
 		line-height: 40px;
@@ -257,7 +257,7 @@
 		display: inline-block;
 		margin-top: 2em;
 		padding: 0.8em 2em;
-		background: #E85D4B;
+		background: #a688fa;
 		line-height: 1.8em;
 		letter-spacing: 1px;
 		text-decoration: none;
@@ -310,7 +310,7 @@
 	{
 		overflow: hidden;
 		padding: 2em 0em;
-		background: #FFF;
+		background: #1a1625;
 	}
 
 	#header
@@ -336,7 +336,7 @@
 	#logo a
 	{
 		text-decoration: none;
-		color: #F67C78;
+		color: #fff;
 	}
 	
 	#logo span
@@ -344,12 +344,12 @@
 		padding-right: 0.5em;
 		text-transform: uppercase;
 		font-size: 0.90em;
-		color: #F67C78;
+		color: #fff;
 }
 
 	#logo span a
 	{
-		color: #F67C78;
+		color: #fff;
 	}
 	
 	
@@ -395,8 +395,8 @@
 	
 	#menu .current_page_item a
 	{
-		background: #F67C78;
-		color: #FFF;
+		background: #a688fa;
+		color: #121212;
 	}
 	
 
@@ -418,7 +418,7 @@
 	{
 		overflow: hidden;
 		padding: 5em 0em 5em 0em;
-		background: #FFF;
+		background: #1a1625;
 	}
 
 	#wrapper1
@@ -429,7 +429,7 @@
 	#wrapper2
 	{
 		overflow: hidden;
-		background: #F3F3F3;
+		background: #46424f;
 		padding: 5em 0em;
 	}
 
@@ -469,7 +469,7 @@
 	#page-wrapper
 	{
 		overflow: hidden;
-		background: #F3F3F3;
+		background: #2f2b3a;
 		padding: 5em 0em;
 	}
 

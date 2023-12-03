@@ -11,8 +11,10 @@ html{
   -webkit-text-size-adjust:100%
 }
 body{
-  margin:0
+  margin:0;
+  background-color: #1a1625;
 }
+
 article,aside,details,figcaption,figure,footer,header,main,menu,nav,section{
   display:block
 }
@@ -124,7 +126,8 @@ textarea{
 html,body{
   font-family:Verdana,sans-serif;
   font-size:15px;
-  line-height:1.5
+  line-height:1.5;
+  color: #fff
 }
 html{
   overflow-x:hidden
@@ -225,8 +228,8 @@ a{
   vertical-align:middle;
   overflow:hidden;
   text-decoration:none;
-  color:white;
-  background-color:black;
+  color:#121212;
+  background-color:#a688fa;
   text-align:center;
   cursor:pointer;
   white-space:nowrap
@@ -251,8 +254,8 @@ a{
   padding:8px 16px;
   overflow:hidden;
   text-decoration:none;
-  color:white;
-  background-color:rgb(0, 0, 0);
+  color:#fff;
+  background-color:#a688fa;
   text-align:center;
   cursor:pointer;
   white-space:nowrap;
@@ -260,7 +263,7 @@ a{
 }
 
 .w3-purchase:hover {
-  box-shadow:0 8px 16px 0 rgba(59, 188, 78, 0.2),0 6px 20px 0 rgba(27, 209, 7, 0.19)
+  box-shadow:0 8px 16px 0 rgba(255, 255, 255, 0.2),0 6px 20px 0 rgba(255, 255, 255, 0.19)
 }
 .w3-disabled,.w3-btn:disabled,.w3-button:disabled{
   cursor:not-allowed;
@@ -359,7 +362,7 @@ a{
 .w3-sidebar{
   height:100%;
   width:200px;
-  background-color:#fff;
+  background-color:#46424f;
   position:fixed!important;
   z-index:1;
   overflow:auto
@@ -1182,8 +1185,8 @@ a{
   background-color:#ffeb3b!important
 }
 .w3-white,.w3-hover-white:hover{
-  color:#000!important;
-  background-color:#c9c9c9!important
+  color:#fff!important;
+  background-color:#46424f!important
 }
 .w3-black,.w3-hover-black:hover{
   color:#fff!important;

@@ -11,7 +11,7 @@ body{
 }
 a{
     transition: all 0.3s ease 0s;
-    color: #000;
+    color: #fff;
 }
 a{
     cursor: pointer;
@@ -87,12 +87,13 @@ button {
     border: none;
 }
 .btn-primary {
-    background:#007AA2;
-    color: #fff;
+    transition: all 0.3s ease 0s;
+    background:#a688fa;
+    color: #121212;
 }
 .btn-primary:hover, .btn-primary:active, .btn-primary:focus, .btn-primary:active:focus, .btn-primary:active:hover {
-    background: #263238;
-    color: #fff;
+    background: #5e43f3;
+    color: #121212;
 }
 a{
     // color: #e10302;
@@ -110,7 +111,7 @@ select.form-control, textarea.form-control, input.form-control[type="text"], inp
     font-size: 12px;
 }
 ul.breadcrumb li:first-child a {
-    color: #333333;
+    color: #fff;
 }
 /*header block*/
 
@@ -133,8 +134,8 @@ header ul.social-list {
     padding: 0;
 }
 #logo a {
-    color: #000000;
-    font-size: 40px;
+    color: #fff;
+    font-size: 33px;
     margin: 0;
     padding: 0;
 }
@@ -181,7 +182,7 @@ button {
 
 /*nav block*/
 .main-nav-block {
-    background: #007AA2;
+    background: #a688fa;
     position: relative;
     padding: 15px 0;
 }
@@ -640,7 +641,7 @@ footer h4 {
     position: relative;
 }
 .well .heading-text i {
-    color: #56a6c1;
+    color: #a688fa;
     float: left;
     font-size: 56px;
     margin-right: 14px;
