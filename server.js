@@ -74,37 +74,60 @@ app.post("/process_form", function (req, res) {
 //Login information
 app.post("/login", function(req, res) {
   console.log(req.body);
+  
+  //get the data from the hidden field.
   the_quantities = req.body['hidden'];
+
+  let errors = [];
+  let errorQueryString = '';
+  console.log(the_quantities);
   the_username = req.body['email'].toLowerCase();
   the_password = req.body['password'];
+
+  if (users_reg_data.hasOwnProperty(the_username)) {
+    let userData = users_reg_data[the_username];
+    let realName = userData.name;
+    let userEmail = the_username;
+    let nameString = `&name=${encodeURIComponent(realName)}&email=${encodeURIComponent(userEmail)}`;
+    
+    if (userData.password === the_password) {
+      //if password matches, redirect with all info
+      res.send(loginRedirectTemplate(the_quantities, realName, nameString));
+      return;
+    } else {
+      errors.push(`Incorrect Password!`);
+    }
+  } else {
+    errors.push(`Username ${the_username} does not exist!`);
+  }
+  errorQueryString = `error=${encodeURIComponent(errors)}`;
+  res.redirect(`/login.html?${the_quantities}&${errorQueryString}`);
+
+  //TEST
+
+  /*let realName = users_reg_data.name;
+  console.log(realName);
+  //get last name, first name, and email in a single array
+  let nameString = `&name=${encodeURIComponent(users_reg_data.name)}}&email=${encodeURIComponent(users_reg_data)}`;
   if (typeof users_reg_data[the_username] != 'undefined') {
       if (users_reg_data[the_username].password == the_password) {
-        // replace with sending an error message on current page #############################################################
-        res.send(`
-        <body>
-        <script>
-        // Redirect to a different page after 2 seconds
-        setTimeout(function () {
-          window.location.href = '/invoice.html?${the_quantities}';
-        }, 2000); // 2000 milliseconds (2 seconds)
-        </script>
-        <div> Welcome ${the_username}! You will be redirected shortly...</div>
-        </body>
-        `);
+        res.send(loginRedirectTemplate(the_quantities, realName, nameString));
       } else {
-        //need to change these two down here into an error
-          res.send(`Wrong password!`);
+        errors.push(`Wrong Password!`);
       }
-      return;
-  }
-  res.send(`${the_username} does not exist`);
+    } else {
+      errors.push(`Username ${the_username} does not exist`);
+      //If error redirect
+      errorQueryString = `error=${encodeURIComponent(errors)}`;
+      res.redirect(`/login.html?${the_quantities}&${errorQueryString}`);
+    }*/
 });
 
 //Registration Information
 app.post("/register", function(req, res) {
   console.log(req.body);
   the_quantities = req.body['hidden'];
-  stickyField = [req.body.email, req.body.lastname, req.body.firstname];
+  console.log(the_quantities);
   let errors = [];
   //Process the registration form
   username = req.body.email.toLowerCase();
@@ -124,7 +147,7 @@ app.post("/register", function(req, res) {
     errors.push(`Password cannot be empty!`);
     console.log("empty");
   } else if (!validatePwd(req.body.password)) {
-    errors.push(`Password must not include spaces! Must have at least one number and one special character and be 10-16 chars long!`);
+    errors.push(`Password is not valid! Requirements: Password must not include spaces, Must have at least one number and one special character and be 10-16 chars long!`);
     console.log("password not valid");
   }
   if (req.body.password != req.body.repeat_password) {
@@ -153,20 +176,17 @@ app.post("/register", function(req, res) {
       fs.writeFileSync('user_data.json', JSON.stringify(users_reg_data));
       console.log("Saved: " + users_reg_data);
       //I would have redirected to store.html if we were using sessions.
-      res.send(`
-      <body>
-      <script>
-      // Redirect to a different page after 2 seconds
-      setTimeout(function () {
-        window.location.href = '/invoice.html?${the_quantities}';
-      }, 2000); // 2000 milliseconds (2 seconds)
-      </script>
-      <div> Thank you for registering, ${[req.body.firstname] + ' ' + [req.body.lastname]}! You will be redirected shortly...</div>
-      </body>
-      `);
+      let realName = [req.body.firstname] + ' ' + [req.body.lastname];
+      let nameString = `&firstname=${encodeURIComponent(req.body.firstname)}&lastname=${encodeURIComponent(req.body.lastname)}&email=${encodeURIComponent(req.body.email)}`;
+      res.send(registerRedirectTemplate(the_quantities, realName, nameString));
   } else {
-    //var erstr = qs.stringify(errors);
-    res.redirect(`register.html?${errors},${stickyField}`);
+    let errorQueryString = '';
+    let stickyFieldString = '';
+    //ChatGPT 
+    for (i=0; i < errors.length; i++) {
+      errorQueryString += `error${i + 1}=${encodeURIComponent(errors[i])}&`;
+    }
+    res.redirect(`register.html?${the_quantities}&firstname=${encodeURIComponent(req.body.firstname)}&lastname=${encodeURIComponent(req.body.lastname)}&email=${encodeURIComponent(req.body.email)}&${errorQueryString}`);
   }
 });
 
@@ -202,10 +222,43 @@ function validatePwd(pwd) {
 
 //Name Validation
 function validateName(name) {
-  fullNameRegex = /^[A-Za-z]{2,30}$/;
+  //This will allow spaces and - in names, because it happens often. Numbers are still not allowed.
+  fullNameRegex = /^[A-Za-z\s\-]{2,30}$/;
   return fullNameRegex.test(name);
 }
 
+function loginRedirectTemplate(qdata, name, invoiceName) {
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <script>
+    // Redirect to a different page after 2 seconds
+    setTimeout(function () {
+      window.location.href = '/invoice.html?${qdata}${invoiceName}&login=YVCNSADYFVnmeqw9umr3i91mri9';
+    }, 2000); // 2000 milliseconds (2 seconds)
+    </script>
+  </head>
+  <body>
+  <div> Welcome ${name}! You will be redirected shortly...</div>
+  </body>
+  </html>
+  `
+}
+
+function registerRedirectTemplate(qdata, name, invoiceName) {
+  return `
+  <body>
+  <script>
+  // Redirect to a different page after 2 seconds
+  setTimeout(function () {
+    window.location.href = '/invoice.html?${qdata}${invoiceName}&login=dfszu9i8NUFJDNUfdNASU0djmgu90SDM';
+  }, 2000); // 2000 milliseconds (2 seconds)
+  </script>
+  <div> Thank you for registering, ${name}! You will be redirected shortly...</div>
+  </body>
+  `
+}
 //Check if body req has product submit (this is probably not for the right assignment)
 
 //Login
