@@ -34,8 +34,14 @@ app.post("/process_form", function (req, res) {
   let errors = {}; 
   let hasInvalidQuantity = false;
   let hasNonNegInt = false;
+  let allQuantitiesZero = true;
   for (let i in product_data) {
     let qty = req.body['quantity' + i];
+    
+    //Check if all quantities are 0 
+    if (qty !== '0') {
+      allQuantitiesZero = false;
+    }
     
     //Check for isNonNegInt
     if (isNonNegInt(qty) === false) {
@@ -49,12 +55,13 @@ app.post("/process_form", function (req, res) {
     }
   }
 
+
   //Turn data from post to string
   const qstr = qs.stringify(req.body);
   console.log(qstr);
   
   //create invoice if valid
-  if (hasNonNegInt || hasInvalidQuantity) {
+  if (hasNonNegInt || hasInvalidQuantity || allQuantitiesZero) {
     res.redirect(`store.html?${qstr}`);
   } else {
       //validation for login required!!!! $#########################################
@@ -66,23 +73,30 @@ app.post("/process_form", function (req, res) {
 app.post("/login", function(req, res) {
   console.log(req.body);
   
-  //get the data from the hidden field.
+  //get the data from the hidden field
   the_quantities = req.body['hidden'];
 
+  //Declaring Variables before Validation
   let errors = [];
   let errorQueryString = '';
   console.log(the_quantities);
+
+  //Matching username to lowercase
   the_username = req.body['email'].toLowerCase();
   the_password = req.body['password'];
 
+  //Match username to its property 
   if (users_reg_data.hasOwnProperty(the_username)) {
+    //Declare variables to be used later on 
     let userData = users_reg_data[the_username];
     let realName = userData.name;
     let userEmail = the_username;
+
+    //Setting the template for the URL query for name and email so it can be sent and retrieved later
     let nameString = `&name=${encodeURIComponent(realName)}&email=${encodeURIComponent(userEmail)}`;
     
     if (userData.password === the_password) {
-      //if password matches, redirect with all info
+      //if password matches, redirect with all info in the query, otherwise, send an error and redirect to the same page
       res.send(loginRedirectTemplate(the_quantities, realName, nameString));
       return;
     } else {
@@ -101,6 +115,7 @@ app.post("/register", function(req, res) {
   the_quantities = req.body['hidden'];
   console.log(the_quantities);
   let errors = [];
+
   //Process the registration form
   username = req.body.email.toLowerCase();
   console.log(username);
@@ -133,6 +148,8 @@ app.post("/register", function(req, res) {
     errors.push(`Please enter a valid name!`);
     console.log("validate name");
   }
+
+  //If no errors within validation, continue with writing the data to the server file
   if (errors.length == 0) {
     let newUser = {
         name: [req.body.firstname] + ' ' + [req.body.lastname],
@@ -142,19 +159,17 @@ app.post("/register", function(req, res) {
     if (!users_reg_data) {
       users_reg_data = {};
     }
-
     users_reg_data[username] = newUser;
     console.log(newUser);
       fs.writeFileSync('user_data.json', JSON.stringify(users_reg_data));
       console.log("Saved: " + users_reg_data);
-      //I would have redirected to store.html if we were using sessions.
+      //declare variables for name, input into string
       let realName = [req.body.firstname] + ' ' + [req.body.lastname];
       let nameString = `&firstname=${encodeURIComponent(req.body.firstname)}&lastname=${encodeURIComponent(req.body.lastname)}&email=${encodeURIComponent(req.body.email)}`;
       res.send(registerRedirectTemplate(the_quantities, realName, nameString));
   } else {
     let errorQueryString = '';
-    let stickyFieldString = '';
-    //ChatGPT 
+    //ChatGPT, for every error in the registration validation, add to the variable error query string in an array that includes the template for URL string
     for (i=0; i < errors.length; i++) {
       errorQueryString += `error${i + 1}=${encodeURIComponent(errors[i])}&`;
     }
@@ -212,6 +227,7 @@ function validateName(name) {
   return fullNameRegex.test(name);
 }
 
+//These are all HTML templates to be used when using res.send, mainly as a redirect notice.
 function loginRedirectTemplate(qdata, name, invoiceName) {
   return `
   <!DOCTYPE html>

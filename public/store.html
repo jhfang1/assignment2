@@ -66,8 +66,12 @@
                         checkQuantityInputs(productForm[`quantity${i}`]); // show where the error is
                     }
                 }
+                if (total_qty !== '0') {
+                  document.getElementById("status").textContent = "Quantities all cannot be zero.";
+                  document.getElementById("status").style = "color: red";
+                }
             }
-            // Now respond to errors or redirect to invoice if all is ok
+            // Now respond to errors, otherwise nothing happens and invoice is OK
             if(has_errors) {
                 document.getElementById("status").textContent = "Please try again!";
             } 
@@ -75,6 +79,7 @@
         }
 
 </script>
+
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
 .w3-bar-block .w3-bar-item {padding:20px}

@@ -4,13 +4,18 @@
 <head>
 	<link rel="icon" href="images/favicon.png"/>
   <meta charset="utf-8" />
-  <link rel="stylesheet" href="/css/general/invoice-style.css">
+  <link rel="stylesheet" href="css/general/invoice-style.css">
   <title>Checkout</title>
 	<link href="css/timepiece/style.css" rel="stylesheet" type="text/css" />
   <script src="./product_data.js" type="text/javascript"></script>
   <script>
+
+    //declare params first, to get the params
 		let params = (new URL(document.location)).searchParams;
+
+    //Run this code after everything has loaded
 		document.addEventListener('DOMContentLoaded', function () {
+      //Check if a user came from login page or registration page, insert data into the invoice template
 			let loginCheck = params.get('login');
 			if (loginCheck === 'dfszu9i8NUFJDNUfdNASU0djmgu90SDM' || loginCheck === 'YVCNSADYFVnmeqw9umr3i91mri9') {
 				if (params.has('firstname')) {
@@ -179,6 +184,7 @@
 			console.log(qty_totals);</script>
 		<input class="btn btn-primary checkoutBtn" id="PurchaseButton" type="submit" name="purchase_submit" value="Purchase Items">
 		</form>
+    <input type="button" onclick="cancelTemplate();" class="btn btn-primary cancelBtn" id="cancelbutton" value="Cancel"></input>
   </body>
   <script>
     //This is for redirecting upon attempted access of the invoice page
@@ -206,7 +212,37 @@
 				  // Redirect to a different page after 2 seconds
 				  setTimeout(function () {
 					window.location.href = '/store.html';
-					}, 4000); // 4000 milliseconds (4 seconds)
+					}, 2000); // 2000 milliseconds (2 seconds)
+				`;
+        document.body.appendChild(script);
+}
+
+//another template for redirecting back to store on cancel
+function cancelTemplate() {
+      let redirectHTML = `
+        <link rel="icon" href="images/favicon.png"/>
+        <link href="css/general/redirect.css" rel="stylesheet" type="text/css"/>
+        <title>Redirecting...</title>
+          <br><br><br>
+          <h1>Cancelling...</h1>
+          <div class="slider">
+          <div class="line"></div>
+          <div class="break dot1"></div>
+          <div class="break dot2"></div>
+          <div class="break dot3"></div>
+          </div>
+          <div>Bringing you back to the store...</div>
+  `;
+
+  document.body.innerHTML = redirectHTML;
+
+  const script = document.createElement('script');
+      	// Set script delay
+				script.textContent = `
+				  // Redirect to a different page after 2 seconds
+				  setTimeout(function () {
+					window.location.href = '/store.html';
+					}, 1000); // 1000 milliseconds (2 seconds)
 				`;
         document.body.appendChild(script);
 }

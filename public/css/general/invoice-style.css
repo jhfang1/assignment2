@@ -100,3 +100,9 @@ body {
   top: 10px;
   cursor: pointer;
 }
+
+.cancelBtn {
+  left: 53%;
+  bottom: 24px;
+  cursor: pointer;
+}
