@@ -96,8 +96,11 @@ app.post("/login", function(req, res) {
     let nameString = `&name=${encodeURIComponent(realName)}&email=${encodeURIComponent(userEmail)}`;
     
     if (userData.password === the_password) {
+      let linkToken = `/invoice.html?${the_quantities}${nameString}&login=dfszu9i8NUFJDNUfdNASU0djmgu90SDM`;
+      let redirectHeader = "Redirecting...";
+      let redirectMessage = `Welcome ${realName}! Redirecting you to the invoice page...`
       //if password matches, redirect with all info in the query, otherwise, send an error and redirect to the same page
-      res.send(loginRedirectTemplate(the_quantities, realName, nameString));
+      res.send(redirectTemplate(redirectHeader, linkToken, redirectMessage));
       return;
     } else {
       errors.push(`Incorrect Password!`);
@@ -166,7 +169,12 @@ app.post("/register", function(req, res) {
       //declare variables for name, input into string
       let realName = [req.body.firstname] + ' ' + [req.body.lastname];
       let nameString = `&firstname=${encodeURIComponent(req.body.firstname)}&lastname=${encodeURIComponent(req.body.lastname)}&email=${encodeURIComponent(req.body.email)}`;
-      res.send(registerRedirectTemplate(the_quantities, realName, nameString));
+      
+      //for the template
+      let msgHeader = "Thanks for registering!";
+      let linkToken = `/invoice.html?${the_quantities}${nameString}&login=YVCNSADYFVnmeqw9umr3i91mri9`;
+      let msgBody = `Thanks for signing up, ${realName}. We'll redirect you to the invoice now.`
+      res.send(redirectTemplate(msgHeader, linkToken, msgBody));
   } else {
     let errorQueryString = '';
     //ChatGPT, for every error in the registration validation, add to the variable error query string in an array that includes the template for URL string
@@ -180,12 +188,31 @@ app.post("/register", function(req, res) {
 //Remove stock after Item Submit
 app.post("/purchase_submit", function(req, res) {
   console.log(req.body);
+
+  //Quantity Validation, make sure the number does not go negative
+  let qtyOver = false;
+
   for (let i in product_data) {
-    //KEEPING TRACK OF STOCK LEFT IR1 ASSIGNMENT 1
+    //KEEPING TRACK OF STOCK LEFT IR1 ASSIGNMENT 1 (this is in here)
     //How much was sold just now
-    product_data[i].total_sold = Number(product_data[i].total_sold + (parseInt(req.body['quantity' + i])));
-    let quantity_remaining = [(product_data[i].quantity_available -= product_data[i].total_sold), product_data[i].total_sold]; // Reduce available quantity
-    console.log(quantity_remaining);
+    let qtySold = parseInt(req.body['quantity' + i]); // Quantity sold in this transaction
+
+    //Validate quantities
+    if (qtySold > product_data[i].quantity_available) {
+      qtyOver = true;
+      console.log("Quantities error, please try again!");
+      break;
+    }
+    //update data if it works
+    product_data[i].total_sold += qtySold; // Update total sold
+    product_data[i].quantity_available -= qtySold;
+    console.log(product_data[i].quantity_available);
+  }
+  if (qtyOver) {
+    let title = "Uh oh!"
+    let link = `/store.html`
+    let paragraph = "We seem to have come across an error submitting your purchase... Please try ordering again after we redirect you..."
+    res.send(redirectTemplate(title, link, paragraph));
   }
   res.send(purchaseTemplateRedirect(req.body['hiddenname'], req.body['hiddentotal']))
 });
@@ -228,7 +255,7 @@ function validateName(name) {
 }
 
 //These are all HTML templates to be used when using res.send, mainly as a redirect notice.
-function loginRedirectTemplate(qdata, name, invoiceName) {
+function redirectTemplate(title, link, p) {
   return `
   <!DOCTYPE html>
   <html>
@@ -238,47 +265,21 @@ function loginRedirectTemplate(qdata, name, invoiceName) {
     <script>
       // Redirect to a different page after 2 seconds
       setTimeout(function () {
-        window.location.href = '/invoice.html?${qdata}${invoiceName}&login=dfszu9i8NUFJDNUfdNASU0djmgu90SDM';
+        window.location.href = '${link}';
       }, 4000); // 4000 milliseconds (2 seconds)
     </script>
     <br><br><br>
-    <h1>Processing Login...</h1>
+    <h1>${title}</h1>
     <div class="slider">
     <div class="line"></div>
     <div class="break dot1"></div>
     <div class="break dot2"></div>
     <div class="break dot3"></div>
     </div>
-    <p>Welcome ${name}! You will be redirected to the invoice page shortly...</p>
+    <p>${p}</p>
   </html>
   `
 }
-
-function registerRedirectTemplate(qdata, name, invoiceName) {
-  return `
-  <!DOCTYPE html>
-  <html>
-  <link rel="icon" href="images/favicon.png"/>
-  <link href="css/general/redirect.css" rel="stylesheet" type="text/css"/>
-  <title>Redirecting...</title>
-    <script>
-      // Redirect to a different page after 2 seconds
-      setTimeout(function () {
-        window.location.href = '/invoice.html?${qdata}${invoiceName}&login=YVCNSADYFVnmeqw9umr3i91mri9';
-      }, 4000); // 4000 milliseconds (2 seconds)
-    </script>
-    <br><br><br>
-    <h1>Processing Registration...</h1>
-    <div class="slider">
-    <div class="line"></div>
-    <div class="break dot1"></div>
-    <div class="break dot2"></div>
-    <div class="break dot3"></div>
-    </div>
-    <div> Thank you for registering, ${name}! You will be redirected to the checkout page shortly...</div>
-  </html>
-  `
-  }
 
 function purchaseTemplateRedirect(name, total) {
   return `

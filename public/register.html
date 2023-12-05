@@ -21,6 +21,21 @@ License URI: http://www.themevault.net/license/-->
 		<script src="templatejs/bootstrap.min.js" type="text/javascript"></script>
 		<script src="templatejs/custom.js" type="text/javascript"></script>
 		<script>
+
+      //Chat GPT assisted
+      //#################   IR 3 for extra credit  ######################
+      function generateStrongPassword() {
+        const length = 14; // Desired password length
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?"; // Characters for password
+  
+        let password = "";
+        for (let i = 0; i < length; i++) {
+          const randomIndex = Math.floor(Math.random() * charset.length);
+          password += charset[randomIndex];
+        }
+        return password;
+      }
+
       window.onload = function() {
 
         //Retrieve error from server, convert it to a proper array
@@ -237,6 +252,14 @@ License URI: http://www.themevault.net/license/-->
 											<label class="col-sm-2 control-label" for="input-password">Password</label>
 											<div class="col-sm-10">
 												<input type="password" name="password" value="" placeholder="Password" id="input-password" class="form-control">
+                        <div id="suggestPassword_div"></div>
+                        <script>
+                          //Script to display said generated password client side
+                          if (document.getElementById("input-password").value === ""){
+                            document.getElementById("suggestPassword_div").textContent = "Here is a strong password you can use:" + " " + generateStrongPassword();
+                            document.getElementById("suggestPassword_div").style.fontWeight = "bold";
+                          }
+                        </script>
 											</div>
 										</div>
 										<div class="form-group required">

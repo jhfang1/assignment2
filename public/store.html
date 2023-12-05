@@ -23,19 +23,14 @@
 
   //get value of wrong inputs and display the error client side before trying to submit. User will still be able to submit.
   function checkQuantityInputs(thing) {
-      for (let i in drinks) {
-        let value = document.getElementById("quantity" + i).value;
-        if (!isNonNegInt(value)) {
-          for (let j = 0; j < this.errors.length; j++) {
-            document.getElementById("status").textContent = errors[j]
-            document.getElementById("status").style.color = "red";
-            return;
-          }
-        }
-      }
-      document.getElementById("status").textContent = ":)";
-      document.getElementById("status").style.color = "green";
+    let value = thing.value;
+    if (!isNonNegInt(value)) {
+      document.getElementById(thing.name + "_errordiv").textContent = errors.join(", ");
+      document.getElementById(thing.name + "_errordiv").style.color = "red";
+    } else {
+      document.getElementById(thing.name + "_errordiv").textContent = " ";
     }
+  }
 
     //if input field is blank, submit as 0
     function checkField() {
@@ -73,7 +68,7 @@
             }
             // Now respond to errors, otherwise nothing happens and invoice is OK
             if(has_errors) {
-                document.getElementById("status").textContent = "Please try again!";
+                document.getElementById("status").textContent = "Please check your quantities and try again!";
             } 
           }
         }
@@ -126,11 +121,14 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Karma", sans-serif}
           <p> Currently $${drinks[i].price} for 1 </p>
           <span id="quantity${i}_label">Amount:</span>
 					<input id="quantity${i}" name="quantity${i}" type="text" placeholder="0" onkeyup="checkQuantityInputs(this);">
+          <div id="quantity${i}_errordiv"></div>
         </div>
       `)
     }
 
   </script>
+<div style="color: #1a1625">1</div>
+<div style="color: #1a1625">1</div>
 <div style="color: #1a1625">1</div>
     <p style="color: white; margin-right: auto;">Click the Purchase button to go to Checkout!</p>
     <div id="status"></div>
